@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { range } from 'lodash'
 
-function App() {
+const Box: React.FC<{ x: string }> = ({ x }) => (
+  <input
+    style={{
+      width: '25px',
+      height: '25px',
+      textAlign: 'center',
+      textTransform: 'uppercase',
+    }}
+    onKeyDown={x => {
+      console.log('xx', x)
+    }}
+    maxLength={1}
+  />
+)
+
+const Grid: React.FC<{ n: number }> = ({ n }) => {
+  const renderGrid = (n: number) =>
+    range(n * n).map(x => (
+      <>
+        <Box x="x" />
+        {(x + 1) % n === 0 && <br />}
+      </>
+    ))
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div style={{ overflow: 'auto', whiteSpace: 'nowrap' }}>
+      {renderGrid(n)}
     </div>
-  );
+  )
 }
 
-export default App;
+const App = () => <Grid n={10} />
+
+export default App
