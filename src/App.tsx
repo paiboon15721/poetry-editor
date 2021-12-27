@@ -1,5 +1,3 @@
-import { range } from 'lodash'
-
 const Box: React.FC<{ x: string }> = ({ x }) => (
   <input
     style={{
@@ -15,22 +13,22 @@ const Box: React.FC<{ x: string }> = ({ x }) => (
   />
 )
 
-const Grid: React.FC<{ n: number }> = ({ n }) => {
-  const renderGrid = (n: number) =>
-    range(n * n).map(x => (
-      <>
-        <Box x="x" />
-        {(x + 1) % n === 0 && <br />}
-      </>
-    ))
-
+const Grid: React.FC<{ xs: string[] }> = ({ xs }) => {
   return (
     <div style={{ overflow: 'auto', whiteSpace: 'nowrap' }}>
-      {renderGrid(n)}
+      {xs.map((x, i) => (
+        <span key={i}>
+          <Box x="x" />
+          {(i + 1) % Math.sqrt(xs.length) === 0 && <br />}
+        </span>
+      ))}
     </div>
   )
 }
 
-const App = () => <Grid n={10} />
+const App = () => {
+  const buildInitialValues = (n: number) => Array(n * n).fill('')
+  return <Grid xs={buildInitialValues(10)} />
+}
 
 export default App
