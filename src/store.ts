@@ -21,7 +21,7 @@ class Store {
   }
 
   select(i: number) {
-    store.refs[i].current?.select()
+    setTimeout(() => store.refs[i].current?.select(), 0)
   }
 
   get sqrt() {
