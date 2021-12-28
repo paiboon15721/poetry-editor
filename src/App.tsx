@@ -1,13 +1,13 @@
-import { observer, useLocalObservable } from 'mobx-react-lite'
-import { createRef, RefObject, useEffect, useRef } from 'react'
+import { observer } from 'mobx-react-lite'
+import { store } from './store'
 
 const buildInitialValues = (n: number) => Array(n * n).fill('x')
 
+store.setVs(buildInitialValues(10))
+
 const Box: React.FC<{
-  childRef: RefObject<HTMLInputElement>
-  value: string
-  onChange: React.ChangeEventHandler<HTMLInputElement>
-}> = observer(({ childRef, value, onChange }) => {
+  i: number
+}> = observer(({ i }) => {
   return (
     <input
       style={{
@@ -16,50 +16,37 @@ const Box: React.FC<{
         textAlign: 'center',
         textTransform: 'uppercase',
       }}
-      ref={childRef}
-      value={value}
+      ref={store.refs[i]}
+      value={store.vs[i]}
       onKeyDown={x => {
         console.log('keydown', x)
       }}
-      onChange={onChange}
+      onChange={x => {
+        store.setV(i, x.target.value)
+      }}
       onFocus={() => {
-        childRef.current?.select()
+        store.refs[i].current?.select()
       }}
       onClick={() => {
-        childRef.current?.select()
+        store.refs[i].current?.select()
       }}
       maxLength={1}
     />
   )
 })
 
-const Grid: React.FC = observer(() => {
-  const xs = useLocalObservable(() => buildInitialValues(10))
-  const refs = useRef<RefObject<HTMLInputElement>[]>([])
-  useEffect(() => {
-    refs.current = refs.current.slice(0, xs.length)
-  }, [xs])
-
+const Grid: React.FC = () => {
   return (
     <div style={{ overflow: 'auto', whiteSpace: 'nowrap' }}>
-      {xs.map((x, i) => {
-        refs.current[i] = createRef()
-        return (
-          <span key={i}>
-            <Box
-              childRef={refs.current[i]}
-              value={x}
-              onChange={x => {
-                xs[i] = x.target.value
-              }}
-            />
-            {(i + 1) % Math.sqrt(xs.length) === 0 && <br />}
-          </span>
-        )
-      })}
+      {store.vs.map((_, i) => (
+        <span key={i}>
+          <Box i={i} />
+          {(i + 1) % store.sqrt === 0 && <br />}
+        </span>
+      ))}
     </div>
   )
-})
+}
 
 const App = () => {
   return <Grid />
