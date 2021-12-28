@@ -20,6 +20,10 @@ class Store {
     this.vs[i] = v
   }
 
+  select(i: number) {
+    store.refs[i].current?.select()
+  }
+
   get sqrt() {
     return Math.sqrt(this.vs.length)
   }

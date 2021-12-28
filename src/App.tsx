@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite'
 import { store } from './store'
 
-const buildInitialValues = (n: number) => Array(n * n).fill('x')
+const buildInitialValues = (n: number) => Array(n * n).fill('')
 
 store.setVs(buildInitialValues(10))
 
@@ -19,16 +19,25 @@ const Box: React.FC<{
       ref={store.refs[i]}
       value={store.vs[i]}
       onKeyDown={x => {
-        console.log('keydown', x)
+        const strategies: { [key in string]: () => void } = {
+          ArrowRight: () => store.select(i + 1),
+          ArrowLeft: () => store.select(i - 1),
+          ArrowUp: () => store.select(i - store.sqrt),
+          ArrowDown: () => store.select(i + store.sqrt),
+        }
+        const func = strategies[x.code]
+        if (func) {
+          func()
+        }
       }}
       onChange={x => {
         store.setV(i, x.target.value)
       }}
       onFocus={() => {
-        store.refs[i].current?.select()
+        store.select(i)
       }}
       onClick={() => {
-        store.refs[i].current?.select()
+        store.select(i)
       }}
       maxLength={1}
     />
