@@ -20,10 +20,10 @@ const Box: React.FC<{
       value={store.vs[i]}
       onKeyDown={x => {
         const strategies: { [key in string]: () => void } = {
-          ArrowRight: () => store.select(i + 1),
-          ArrowLeft: () => store.select(i - 1),
-          ArrowUp: () => store.select(i - store.sqrt),
-          ArrowDown: () => store.select(i + store.sqrt),
+          ArrowLeft: () => store.moveLeft(),
+          ArrowRight: () => store.moveRight(),
+          ArrowUp: () => store.moveUp(),
+          ArrowDown: () => store.moveDown(),
         }
         const func = strategies[x.code]
         if (func) {
@@ -31,10 +31,7 @@ const Box: React.FC<{
         }
       }}
       onChange={x => {
-        store.setV(i, x.target.value)
-      }}
-      onFocus={() => {
-        store.select(i)
+        store.setV(x.target.value)
       }}
       onClick={() => {
         store.select(i)
