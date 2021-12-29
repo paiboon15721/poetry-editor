@@ -1,9 +1,10 @@
 import { observer } from 'mobx-react-lite'
 import { store } from './store'
 
+const data = localStorage.getItem('data')
 const buildInitialValues = (n: number) => Array(n * n).fill('')
 
-store.setVs(buildInitialValues(10))
+store.setVs(data ? data.split(',') : buildInitialValues(10))
 
 const Box: React.FC<{
   i: number

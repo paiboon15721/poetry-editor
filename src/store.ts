@@ -19,6 +19,7 @@ class Store {
 
   setV(v: string) {
     this.vs[this.i] = v
+    localStorage.setItem('data', this.vs.join())
   }
 
   select(i: number) {
