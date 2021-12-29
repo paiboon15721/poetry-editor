@@ -55,16 +55,38 @@ const Grid: React.FC = () => (
 )
 
 const App = () => (
-  <div
-    style={{
-      minHeight: '100vh',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    }}
-  >
-    <Grid />
-  </div>
+  <>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Grid />
+    </div>
+    <div
+      style={{
+        position: 'fixed',
+        bottom: 0,
+        right: 0,
+        opacity: 0.2,
+      }}
+    >
+      <button>import</button>
+      <button>export</button>
+      <button
+        onClick={() => {
+          if (window.confirm('Are you sure?')) {
+            store.clear()
+          }
+        }}
+      >
+        clear
+      </button>
+    </div>
+  </>
 )
 
 export default App

@@ -6,9 +6,13 @@ class Store {
     makeAutoObservable(this, {
       refs: false,
     })
+    this.initialVs()
+  }
+
+  initialVs() {
     const data = localStorage.getItem('data')
     const buildInitialValues = (n: number) => Array(n * n).fill('')
-    this.setVs(data ? data.split(',') : buildInitialValues(50))
+    this.setVs(data ? data.split(',') : buildInitialValues(80))
   }
 
   refs: RefObject<HTMLInputElement>[] = []
@@ -20,6 +24,11 @@ class Store {
     this.refs = values.map(() => createRef())
   }
 
+  clear() {
+    localStorage.clear()
+    this.initialVs()
+  }
+
   setV(v: string) {
     this.vs[this.i] = v
     localStorage.setItem('data', this.vs.join())
@@ -27,8 +36,10 @@ class Store {
 
   select(i: number) {
     if (i < 0 || i > this.vs.length - 1) return
-    this.i = i
-    setTimeout(() => this.refs[i].current?.select(), 0)
+    setTimeout(() => {
+      this.refs[i].current?.select()
+      this.i = i
+    }, 0)
   }
 
   moveLeft() {
