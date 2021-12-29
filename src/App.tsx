@@ -55,7 +55,18 @@ const Grid: React.FC = () => {
 }
 
 const App = () => {
-  return <Grid />
+  return (
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
+      <Grid />
+    </div>
+  )
 }
 
 export default App
