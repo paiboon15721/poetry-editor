@@ -75,7 +75,13 @@ const App = () => (
       }}
     >
       <button>import</button>
-      <button>export</button>
+      <button
+        onClick={() => {
+          store.export()
+        }}
+      >
+        export
+      </button>
       <button
         onClick={() => {
           if (window.confirm('Are you sure?')) {
