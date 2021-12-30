@@ -37,7 +37,7 @@ const Box: React.FC<{
   />
 ))
 
-const Grid: React.FC = () => (
+const Grid: React.FC = observer(() => (
   <div
     style={{
       overflow: 'auto',
@@ -52,7 +52,7 @@ const Grid: React.FC = () => (
       </Fragment>
     ))}
   </div>
-)
+))
 
 const App = () => (
   <>
@@ -71,9 +71,21 @@ const App = () => (
         position: 'fixed',
         bottom: 0,
         right: 0,
-        opacity: 0.2,
+        opacity: 0.5,
       }}
     >
+      <input
+        type="file"
+        onChange={e => {
+          const reader = new FileReader()
+          reader.onload = e => {
+            store.setVs((e.target?.result as string).split(','))
+          }
+          if (e.target.files?.length) {
+            reader.readAsText(e.target.files[0])
+          }
+        }}
+      />
       <button>import</button>
       <button
         onClick={() => {

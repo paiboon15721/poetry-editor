@@ -5,6 +5,7 @@ class Store {
   constructor() {
     makeAutoObservable(this, {
       refs: false,
+      i: false,
     })
     this.initialVs()
   }
@@ -22,6 +23,7 @@ class Store {
   setVs(values: string[]) {
     this.vs = values
     this.refs = values.map(() => createRef())
+    this.save()
   }
 
   clear() {
@@ -29,9 +31,13 @@ class Store {
     this.initialVs()
   }
 
+  save() {
+    localStorage.setItem('data', this.vs.join())
+  }
+
   setV(v: string) {
     this.vs[this.i] = v
-    localStorage.setItem('data', this.vs.join())
+    this.save()
   }
 
   select(i: number) {
