@@ -68,6 +68,14 @@ class Store {
     return Math.sqrt(this.vs.length)
   }
 
+  import(f: File) {
+    const reader = new FileReader()
+    reader.onload = e => {
+      this.setVs((e.target?.result as string).split(','))
+    }
+    reader.readAsText(f)
+  }
+
   export() {
     const e = document.createElement('a')
     e.setAttribute('href', `data:text/plain;charset=utf-8,${this.vs.join()}`)

@@ -77,12 +77,8 @@ const App = () => (
       <input
         type="file"
         onChange={e => {
-          const reader = new FileReader()
-          reader.onload = e => {
-            store.setVs((e.target?.result as string).split(','))
-          }
           if (e.target.files?.length) {
-            reader.readAsText(e.target.files[0])
+            store.import(e.target.files[0])
           }
         }}
       />
