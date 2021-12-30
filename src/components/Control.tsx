@@ -1,6 +1,9 @@
+import { useRef } from 'react'
 import { store } from '../store'
 
 export const Control: React.FC = () => {
+  const fileInput = useRef<HTMLInputElement>(null)
+
   return (
     <div
       style={{
@@ -12,6 +15,7 @@ export const Control: React.FC = () => {
     >
       <input
         type="file"
+        ref={fileInput}
         style={{ display: 'none' }}
         onChange={e => {
           if (e.target.files?.length) {
@@ -19,7 +23,13 @@ export const Control: React.FC = () => {
           }
         }}
       />
-      <button>import</button>
+      <button
+        onClick={() => {
+          fileInput?.current?.click()
+        }}
+      >
+        import
+      </button>
       <button
         onClick={() => {
           store.export()
