@@ -2,6 +2,8 @@ import { makeAutoObservable } from 'mobx'
 import { createRef, RefObject } from 'react'
 
 type Dr = 'u' | 'r' | 'l' | 'd'
+type Dg = 0 | 90 | 180 | 270
+type V = { v: string; dg: Dg }
 
 const drMapper: { [key in Dr]: string } = {
   u: '↑',
@@ -25,7 +27,7 @@ class Store {
   initialVs() {
     const data = localStorage.getItem('data')
     const buildInitialValues = (n: number) => Array(n * n).fill('')
-    this.setVs(data ? data.split(',') : buildInitialValues(10))
+    this.setVs(data ? JSON.parse(data) : buildInitialValues(10))
   }
 
   changeDg() {
@@ -41,10 +43,10 @@ class Store {
   }
 
   refs: RefObject<HTMLInputElement>[] = []
-  vs: string[] = []
+  vs: V[] = []
   i: number = 0
 
-  setVs(values: string[]) {
+  setVs(values: V[]) {
     this.vs = values
     this.refs = values.map(() => createRef())
     this.save()
@@ -56,12 +58,15 @@ class Store {
   }
 
   save() {
-    localStorage.setItem('data', this.vs.join())
+    localStorage.setItem('data', JSON.stringify(this.vs))
   }
 
   setV(v: string) {
     if (v === ' ') return
-    this.vs[this.i] = v
+    this.vs[this.i] = {
+      v,
+      dg: this.dg,
+    }
     this.save()
   }
 
@@ -112,14 +117,17 @@ class Store {
   import(f: File) {
     const reader = new FileReader()
     reader.onload = e => {
-      this.setVs((e.target?.result as string).split(','))
+      this.setVs(JSON.parse(e.target?.result as string))
     }
     reader.readAsText(f)
   }
 
   export() {
     const e = document.createElement('a')
-    e.setAttribute('href', `data:text/plain;charset=utf-8,${this.vs.join()}`)
+    e.setAttribute(
+      'href',
+      `data:text/plain;charset=utf-8,${JSON.stringify(this.vs)}`,
+    )
     e.setAttribute('download', 'poetry.txt')
     e.style.display = 'none'
     document.body.appendChild(e)

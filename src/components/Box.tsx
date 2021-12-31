@@ -9,11 +9,11 @@ export const Box: React.FC<{
       width: '15px',
       height: '15px',
       textAlign: 'center',
-      transform: `rotate(${store.dg}deg)`,
+      transform: `rotate(${store.vs[i].dg}deg)`,
       border: 0,
     }}
     ref={store.refs[i]}
-    value={store.vs[i]}
+    value={store.vs[i].v}
     onKeyDown={x => {
       const strategies: { [key in string]: () => void } = {
         ArrowLeft: () => store.moveLeft(x.shiftKey),
