@@ -13,7 +13,7 @@ export const Box: React.FC<{
       border: 0,
     }}
     ref={store.refs[i]}
-    value={store.vs[i].v}
+    value={store.vs[i].v || ''}
     onKeyDown={x => {
       const strategies: { [key in string]: () => void } = {
         ArrowLeft: () => store.moveLeft(x.shiftKey),
