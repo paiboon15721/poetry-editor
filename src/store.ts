@@ -67,6 +67,13 @@ class Store {
       v,
       dg: this.dg,
     }
+    const moveStrategies: { [key in Dr]: () => void } = {
+      u: () => this.moveUp(),
+      d: () => this.moveDown(),
+      l: () => this.moveLeft(),
+      r: () => this.moveRight(),
+    }
+    moveStrategies[this.dr]()
     this.save()
   }
 
