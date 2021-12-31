@@ -10,10 +10,20 @@ class Store {
     this.initialVs()
   }
 
+  dg: 0 | 90 | 180 | 270 = 0
+
   initialVs() {
     const data = localStorage.getItem('data')
     const buildInitialValues = (n: number) => Array(n * n).fill('')
-    this.setVs(data ? data.split(',') : buildInitialValues(80))
+    this.setVs(data ? data.split(',') : buildInitialValues(10))
+  }
+
+  changeDeg() {
+    if (this.dg === 270) {
+      this.dg = 0
+      return
+    }
+    this.dg += 90
   }
 
   refs: RefObject<HTMLInputElement>[] = []

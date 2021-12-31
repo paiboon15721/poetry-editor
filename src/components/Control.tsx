@@ -1,5 +1,6 @@
 import { useRef } from 'react'
 import { store } from '../store'
+import { Indicator } from './Indicator'
 
 export const Control: React.FC = () => {
   const fileInput = useRef<HTMLInputElement>(null)
@@ -13,6 +14,7 @@ export const Control: React.FC = () => {
         opacity: 0.5,
       }}
     >
+      <Indicator />
       <input
         type="file"
         ref={fileInput}
