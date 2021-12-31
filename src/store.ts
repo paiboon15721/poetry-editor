@@ -30,7 +30,7 @@ class Store {
       Array(n * n)
         .fill(null)
         .map(() => ({ v: '', dg: 0 }))
-    this.setVs(data ? JSON.parse(data) : buildInitialValues(10))
+    this.setVs(data ? JSON.parse(data) : buildInitialValues(80))
   }
 
   changeDg() {
@@ -70,13 +70,6 @@ class Store {
       v,
       dg: this.dg,
     }
-    const moveStrategies: { [key in Dr]: () => void } = {
-      u: () => this.moveUp(),
-      d: () => this.moveDown(),
-      l: () => this.moveLeft(),
-      r: () => this.moveRight(),
-    }
-    moveStrategies[this.dr]()
     this.save()
   }
 
@@ -118,6 +111,29 @@ class Store {
       return
     }
     this.select(this.i + this.sqrt)
+  }
+
+  onKeyDown(key: string, shift = false) {
+    const strategies: { [key in string]: () => void } = {
+      ArrowLeft: () => this.moveLeft(shift),
+      ArrowRight: () => this.moveRight(shift),
+      ArrowUp: () => this.moveUp(shift),
+      ArrowDown: () => this.moveDown(shift),
+      ' ': () => this.changeDg(),
+    }
+    const func = strategies[key]
+    if (func) {
+      func()
+    }
+    if (key.length === 1 && key !== ' ') {
+      const moveStrategies: { [key in Dr]: () => void } = {
+        u: () => this.moveUp(),
+        d: () => this.moveDown(),
+        l: () => this.moveLeft(),
+        r: () => this.moveRight(),
+      }
+      moveStrategies[this.dr]()
+    }
   }
 
   get sqrt() {
