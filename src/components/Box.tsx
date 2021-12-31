@@ -9,7 +9,6 @@ export const Box: React.FC<{
       width: '15px',
       height: '15px',
       textAlign: 'center',
-      textTransform: 'uppercase',
       border: 0,
     }}
     ref={store.refs[i]}
