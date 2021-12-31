@@ -26,7 +26,10 @@ class Store {
 
   initialVs() {
     const data = localStorage.getItem('data')
-    const buildInitialValues = (n: number) => Array(n * n).fill('')
+    const buildInitialValues = (n: number) =>
+      Array(n * n)
+        .fill(null)
+        .map(() => ({ v: '', dg: 0 }))
     this.setVs(data ? JSON.parse(data) : buildInitialValues(10))
   }
 
