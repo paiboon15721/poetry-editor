@@ -125,7 +125,17 @@ class Store {
     if (func) {
       func()
     }
-    if ((key.length === 1 || key === 'Backspace') && key !== ' ') {
+    if (key === 'Backspace') {
+      const moveStrategies: { [key in Dr]: () => void } = {
+        u: () => this.moveDown(),
+        d: () => this.moveUp(),
+        l: () => this.moveRight(),
+        r: () => this.moveLeft(),
+      }
+      moveStrategies[this.dr]()
+      return
+    }
+    if (key.length === 1 && key !== ' ') {
       const moveStrategies: { [key in Dr]: () => void } = {
         u: () => this.moveUp(),
         d: () => this.moveDown(),
