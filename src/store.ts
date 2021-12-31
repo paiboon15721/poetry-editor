@@ -60,6 +60,7 @@ class Store {
   }
 
   setV(v: string) {
+    if (v === ' ') return
     this.vs[this.i] = v
     this.save()
   }
