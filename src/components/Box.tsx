@@ -16,11 +16,11 @@ export const Box: React.FC<{
     value={store.vs[i]}
     onKeyDown={x => {
       const strategies: { [key in string]: () => void } = {
-        ArrowLeft: () => store.moveLeft(),
-        ArrowRight: () => store.moveRight(),
-        ArrowUp: () => store.moveUp(),
-        ArrowDown: () => store.moveDown(),
-        ControlLeft: () => store.changeDeg(),
+        ArrowLeft: () => store.moveLeft(x.shiftKey),
+        ArrowRight: () => store.moveRight(x.shiftKey),
+        ArrowUp: () => store.moveUp(x.shiftKey),
+        ArrowDown: () => store.moveDown(x.shiftKey),
+        Space: () => store.changeDg(),
       }
       const func = strategies[x.code]
       if (func) {

@@ -1,6 +1,15 @@
 import { makeAutoObservable } from 'mobx'
 import { createRef, RefObject } from 'react'
 
+type Dr = 'u' | 'r' | 'l' | 'd'
+
+const drMapper: { [key in Dr]: string } = {
+  u: '↑',
+  d: '↓',
+  r: '→',
+  l: '←',
+}
+
 class Store {
   constructor() {
     makeAutoObservable(this, {
@@ -11,6 +20,7 @@ class Store {
   }
 
   dg: 0 | 90 | 180 | 270 = 0
+  dr: Dr = 'r'
 
   initialVs() {
     const data = localStorage.getItem('data')
@@ -18,12 +28,16 @@ class Store {
     this.setVs(data ? data.split(',') : buildInitialValues(10))
   }
 
-  changeDeg() {
+  changeDg() {
     if (this.dg === 270) {
       this.dg = 0
       return
     }
     this.dg += 90
+  }
+
+  get drArrow() {
+    return drMapper[this.dr]
   }
 
   refs: RefObject<HTMLInputElement>[] = []
@@ -58,19 +72,35 @@ class Store {
     }, 0)
   }
 
-  moveLeft() {
+  moveLeft(shift = false) {
+    if (shift) {
+      this.dr = 'l'
+      return
+    }
     this.select(this.i - 1)
   }
 
-  moveRight() {
+  moveRight(shift = false) {
+    if (shift) {
+      this.dr = 'r'
+      return
+    }
     this.select(this.i + 1)
   }
 
-  moveUp() {
+  moveUp(shift = false) {
+    if (shift) {
+      this.dr = 'u'
+      return
+    }
     this.select(this.i - this.sqrt)
   }
 
-  moveDown() {
+  moveDown(shift = false) {
+    if (shift) {
+      this.dr = 'd'
+      return
+    }
     this.select(this.i + this.sqrt)
   }
 
