@@ -1,5 +1,5 @@
 import { createRef, RefObject } from 'react'
-import { Dg, Dr, drMapper, V } from './types'
+import { Dg, Dr, drMapper, V, buildInitialValues } from './types'
 
 class Store {
   setVs(values: V[]) {
@@ -10,11 +10,7 @@ class Store {
 
   private initialVs() {
     const data = localStorage.getItem('data')
-    const buildInitialValues = (n: number) =>
-      Array(n * n)
-        .fill(null)
-        .map(() => ({ v: '', dg: 0 }))
-    this.setVs(data ? JSON.parse(data) : buildInitialValues(80))
+    this.setVs(data ? JSON.parse(data) : buildInitialValues())
   }
 
   constructor() {
@@ -39,11 +35,25 @@ class Store {
     return this.refs[this.i].current!
   }
 
+  setVsToRefs() {
+    this.vs.forEach((x, i) => {
+      const c = this.refs[i].current
+      if (c) {
+        c.value = x.v
+        c.style.transform = `rotate(${x.dg}deg)`
+      }
+    })
+  }
+
   setV(v: string) {
     this.current.style.transform = `rotate(${this.dg}deg)`
-    if (v === ' ') {
+    if (v === ' ' && this.current.value === ' ') {
       this.current.value = ''
       return
+    }
+    this.vs[this.i] = {
+      v,
+      dg: this.dg,
     }
     this.save()
   }

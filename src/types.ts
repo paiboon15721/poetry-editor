@@ -8,3 +8,10 @@ export const drMapper: { [key in Dr]: string } = {
   r: '→',
   l: '←',
 }
+
+const gridSize = 80
+
+export const buildInitialValues = () =>
+  Array(gridSize * gridSize)
+    .fill(null)
+    .map(() => ({ v: '', dg: 0 }))
