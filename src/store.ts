@@ -100,20 +100,21 @@ class Store {
     this.select(this.i + this.sqrt)
   }
 
-  onKeyDown(key: string, shift = false) {
+  onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
     const strategies: { [key in string]: () => void } = {
-      ArrowLeft: () => this.moveLeft(shift),
-      ArrowRight: () => this.moveRight(shift),
-      ArrowUp: () => this.moveUp(shift),
-      ArrowDown: () => this.moveDown(shift),
+      ArrowLeft: () => this.moveLeft(e.shiftKey),
+      ArrowRight: () => this.moveRight(e.shiftKey),
+      Tab: () => e.preventDefault(),
+      ArrowUp: () => this.moveUp(e.shiftKey),
+      ArrowDown: () => this.moveDown(e.shiftKey),
       ' ': () => this.changeDg(),
     }
-    const func = strategies[key]
+    const func = strategies[e.key]
     if (func) {
       func()
       return
     }
-    if (key === 'Backspace') {
+    if (e.key === 'Backspace') {
       const moveStrategies: { [key in Dr]: () => void } = {
         u: () => this.moveDown(),
         d: () => this.moveUp(),
@@ -123,7 +124,7 @@ class Store {
       moveStrategies[this.dr]()
       return
     }
-    if (key.length === 1 && key !== ' ') {
+    if (e.key.length === 1 && e.key !== ' ') {
       const moveStrategies: { [key in Dr]: () => void } = {
         u: () => this.moveUp(),
         d: () => this.moveDown(),

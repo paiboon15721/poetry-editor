@@ -12,7 +12,7 @@ export const Box: React.FC<{
     }}
     ref={store.refs[i]}
     onKeyDown={e => {
-      store.onKeyDown(e.key, e.shiftKey)
+      store.onKeyDown(e)
     }}
     onChange={e => {
       store.setV(e.target.value)
