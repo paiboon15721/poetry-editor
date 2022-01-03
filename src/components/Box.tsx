@@ -5,6 +5,7 @@ export const Box: React.FC<{
 }> = ({ i }) => (
   <input
     style={{
+      caretColor: 'transparent',
       width: '15px',
       height: '15px',
       textAlign: 'center',
@@ -13,9 +14,6 @@ export const Box: React.FC<{
     ref={store.refs[i]}
     onKeyDown={e => {
       store.onKeyDown(e)
-    }}
-    onChange={e => {
-      store.setV(e.target.value)
     }}
     onClick={() => {
       store.select(i)

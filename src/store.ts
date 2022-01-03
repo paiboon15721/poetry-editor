@@ -51,10 +51,7 @@ class Store {
 
   setV(v: string) {
     this.current.style.transform = `rotate(${this.dg}deg)`
-    if (v === ' ' && this.current.value === ' ') {
-      this.current.value = ''
-      return
-    }
+    this.current.value = v
     this.vs[this.i] = {
       v,
       dg: this.dg,
@@ -101,6 +98,7 @@ class Store {
   }
 
   onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    e.preventDefault()
     const strategies: { [key in string]: () => void } = {
       ArrowLeft: () => this.moveLeft(e.shiftKey),
       ArrowRight: () => this.moveRight(e.shiftKey),
@@ -121,6 +119,7 @@ class Store {
         l: () => this.moveRight(),
         r: () => this.moveLeft(),
       }
+      this.setV('')
       moveStrategies[this.dr]()
       return
     }
@@ -131,6 +130,7 @@ class Store {
         l: () => this.moveLeft(),
         r: () => this.moveRight(),
       }
+      this.setV(e.key)
       moveStrategies[this.dr]()
     }
   }
