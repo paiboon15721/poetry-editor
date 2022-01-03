@@ -124,6 +124,7 @@ class Store {
     const func = strategies[key]
     if (func) {
       func()
+      return
     }
     if (key === 'Backspace') {
       const moveStrategies: { [key in Dr]: () => void } = {
