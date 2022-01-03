@@ -21,6 +21,11 @@ class Store {
     this.initialVs()
   }
 
+  setIndicatorNotify(notify: () => void) {
+    this.indicatorNotify = notify
+  }
+
+  indicatorNotify = () => {}
   dg: Dg = 0
   dr: Dr = 'r'
   refs: RefObject<HTMLInputElement>[] = []
@@ -98,7 +103,6 @@ class Store {
   }
 
   onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    e.preventDefault()
     const strategies: { [key in string]: () => void } = {
       ArrowLeft: () => this.moveLeft(e.shiftKey),
       ArrowRight: () => this.moveRight(e.shiftKey),
@@ -110,6 +114,9 @@ class Store {
     const func = strategies[e.key]
     if (func) {
       func()
+      if (e.shiftKey || e.key === ' ') {
+        this.indicatorNotify()
+      }
       return
     }
     if (e.key === 'Backspace') {
@@ -120,10 +127,11 @@ class Store {
         r: () => this.moveLeft(),
       }
       this.setV('')
+      e.preventDefault()
       moveStrategies[this.dr]()
       return
     }
-    if (e.key.length === 1 && e.key !== ' ') {
+    if (e.key.length === 1 && e.key !== ' ' && !e.ctrlKey) {
       const moveStrategies: { [key in Dr]: () => void } = {
         u: () => this.moveUp(),
         d: () => this.moveDown(),
@@ -131,6 +139,7 @@ class Store {
         r: () => this.moveRight(),
       }
       this.setV(e.key)
+      e.preventDefault()
       moveStrategies[this.dr]()
     }
   }
