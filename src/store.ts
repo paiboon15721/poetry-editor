@@ -1,30 +1,14 @@
-import { makeAutoObservable } from 'mobx'
 import { createRef, RefObject } from 'react'
-
-type Dr = 'u' | 'r' | 'l' | 'd'
-type Dg = 0 | 90 | 180 | 270
-type V = { v: string; dg: Dg }
-
-const drMapper: { [key in Dr]: string } = {
-  u: '↑',
-  d: '↓',
-  r: '→',
-  l: '←',
-}
+import { Dg, Dr, drMapper, V } from './types'
 
 class Store {
-  constructor() {
-    makeAutoObservable(this, {
-      refs: false,
-      i: false,
-    })
-    this.initialVs()
+  setVs(values: V[]) {
+    this.vs = values
+    this.refs = values.map(() => createRef())
+    this.save()
   }
 
-  dg: 0 | 90 | 180 | 270 = 0
-  dr: Dr = 'r'
-
-  initialVs() {
+  private initialVs() {
     const data = localStorage.getItem('data')
     const buildInitialValues = (n: number) =>
       Array(n * n)
@@ -33,52 +17,41 @@ class Store {
     this.setVs(data ? JSON.parse(data) : buildInitialValues(80))
   }
 
-  changeDg() {
-    if (this.dg === 270) {
-      this.dg = 0
-      return
-    }
-    this.dg += 90
+  constructor() {
+    this.initialVs()
+  }
+
+  dg: Dg = 0
+  dr: Dr = 'r'
+  refs: RefObject<HTMLInputElement>[] = []
+  vs: V[] = []
+  i: number = 0
+
+  get sqrt() {
+    return Math.sqrt(this.refs.length)
   }
 
   get drArrow() {
     return drMapper[this.dr]
   }
 
-  refs: RefObject<HTMLInputElement>[] = []
-  vs: V[] = []
-  i: number = 0
-
-  setVs(values: V[]) {
-    this.vs = values
-    this.refs = values.map(() => createRef())
-    this.save()
-  }
-
-  clear() {
-    localStorage.clear()
-    this.initialVs()
-  }
-
-  save() {
-    localStorage.setItem('data', JSON.stringify(this.vs))
+  get current() {
+    return this.refs[this.i].current!
   }
 
   setV(v: string) {
-    if (v === ' ') return
-    this.vs[this.i] = {
-      v,
-      dg: this.dg,
+    this.current.style.transform = `rotate(${this.dg}deg)`
+    if (v === ' ') {
+      this.current.value = ''
+      return
     }
     this.save()
   }
 
   select(i: number) {
-    if (i < 0 || i > this.vs.length - 1) return
-    setTimeout(() => {
-      this.refs[i].current?.select()
-      this.i = i
-    }, 0)
+    if (i < 0 || i > this.refs.length - 1) return
+    this.i = i
+    this.current.select()
   }
 
   moveLeft(shift = false) {
@@ -147,8 +120,21 @@ class Store {
     }
   }
 
-  get sqrt() {
-    return Math.sqrt(this.vs.length)
+  changeDg() {
+    if (this.dg === 270) {
+      this.dg = 0
+      return
+    }
+    this.dg += 90
+  }
+
+  clear() {
+    localStorage.clear()
+    this.initialVs()
+  }
+
+  save() {
+    localStorage.setItem('data', JSON.stringify(this.vs))
   }
 
   import(f: File) {

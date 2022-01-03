@@ -1,9 +1,8 @@
-import { observer } from 'mobx-react-lite'
 import { Fragment } from 'react'
 import { store } from '../store'
 import { Box } from './Box'
 
-export const Grid: React.FC = observer(() => (
+export const Grid: React.FC = () => (
   <div
     style={{
       overflow: 'auto',
@@ -11,11 +10,11 @@ export const Grid: React.FC = observer(() => (
       border: '1px solid black',
     }}
   >
-    {store.vs.map((_, i) => (
+    {store.refs.map((_, i) => (
       <Fragment key={i}>
         <Box i={i} />
         {(i + 1) % store.sqrt === 0 && <br />}
       </Fragment>
     ))}
   </div>
-))
+)
