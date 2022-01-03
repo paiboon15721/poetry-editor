@@ -4,7 +4,11 @@ import { Dg, Dr, drMapper, V, buildInitialValues } from './types'
 class Store {
   setVs(values: V[]) {
     this.vs = values
-    this.refs = values.map(() => createRef())
+    if (this.refs.length) {
+      this.setVsToRefs()
+    } else {
+      this.refs = values.map(() => createRef())
+    }
     this.save()
   }
 
